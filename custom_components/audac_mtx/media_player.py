@@ -10,10 +10,9 @@ from .const import DOMAIN, SUPPORTED_SOURCES, FRIENDLY_TO_INDEX
 _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
-    data = hass.data[DOMAIN][entry.entry_id]
-    hub = data["hub"]
+    hub = hass.data[DOMAIN][entry.entry_id]
     zones = entry.data["zones"]
-    entities = [AudacZoneEntity(hub, zone, entry.entry_id, hass) for zone in range(1, zones + 1)]
+    entities = [AudacZoneEntity(hub, zone) for zone in range(1, zones + 1)]
     async_add_entities(entities)
 
 class AudacZoneEntity(MediaPlayerEntity):
@@ -23,11 +22,9 @@ class AudacZoneEntity(MediaPlayerEntity):
         | MediaPlayerEntityFeature.SELECT_SOURCE
     )
 
-    def __init__(self, hub, zone: int, entry_id: str, hass: HomeAssistant):
+    def __init__(self, hub, zone: int):
         self.hub = hub
         self.zone = zone
-        self.entry_id = entry_id
-        self.hass = hass
         self._attr_name = f"AUDAC Zone {zone}"
         self._attr_state = MediaPlayerState.ON
         self._volume = 0.5
@@ -37,7 +34,7 @@ class AudacZoneEntity(MediaPlayerEntity):
 
     @property
     def unique_id(self):
-        return f"audac_mtx_zone_{self.entry_id}_{self.zone}"
+        return f"audac_mtx_zone_{self.zone}"
 
     @property
     def volume_level(self) -> float | None:
@@ -76,13 +73,6 @@ class AudacZoneEntity(MediaPlayerEntity):
         self.async_write_ha_state()
 
     async def async_update(self):
-        info = await self.hub.get_zone_info(self.zone)
-        vol = info.get("volume")
-        if vol is not None:
-            self._volume = vol / 100.0
-        mute = info.get("mute")
-        if mute is not None:
-            self._muted = bool(mute)
-        src = info.get("source")
-        if src is not None and src in SUPPORTED_SOURCES:
-            self._source = SUPPORTED_SOURCES[src]
+        # Optionnel: ici tu peux parser la réponse GZI pour MAJ réelle
+        # resp = await self.hub.get_zone_info(self.zone)
+        pass
