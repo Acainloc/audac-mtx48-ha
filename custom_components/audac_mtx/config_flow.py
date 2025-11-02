@@ -23,7 +23,9 @@ class AudacConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(self, user_input=None):
         if user_input is not None:
-            return self.async_create_entry(title=f"AUDAC MTX ({user_input['host']})", data=user_input)
+            return self.async_create_entry(
+                title=f"AUDAC MTX ({user_input['host']})", data=user_input
+            )
         return self.async_show_form(step_id="user", data_schema=DATA_SCHEMA)
 
     @callback
@@ -37,8 +39,15 @@ class AudacOptionsFlow(config_entries.OptionsFlow):
     async def async_step_init(self, user_input=None):
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
-        data_schema = vol.Schema({
-            vol.Optional("poll_interval", default=self.entry.options.get("poll_interval", DEFAULT_POLL_INTERVAL)): int,
-            vol.Optional("rate_limit_ms", default=self.entry.options.get("rate_limit_ms", DEFAULT_RATE_LIMIT_MS)): int,
+
+        schema = vol.Schema({
+            vol.Optional(
+                "poll_interval",
+                default=self.entry.options.get("poll_interval", DEFAULT_POLL_INTERVAL)
+            ): int,
+            vol.Optional(
+                "rate_limit_ms",
+                default=self.entry.options.get("rate_limit_ms", DEFAULT_RATE_LIMIT_MS)
+            ): int,
         })
-        return self.async_show_form(step_id="init", data_schema=data_schema)
+        return self.async_show_form(step_id="init", data_schema=schema)

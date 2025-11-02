@@ -8,7 +8,6 @@ from .hub import AudacHub
 from .services import async_register_services, async_unregister_services
 
 _LOGGER = logging.getLogger(__name__)
-
 PLATFORMS: list[Platform] = [Platform.MEDIA_PLAYER]
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -25,7 +24,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = {
         "hub": hub,
-        "presets": {},  # name -> {zone: {volume, mute, source}}
+        "presets": {},
     }
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
@@ -34,8 +33,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
-    data = hass.data[DOMAIN].pop(entry.entry_id)
-    hub: AudacHub = data["hub"]
-    await hub.async_close()
+    data = hass.data[DOMAIN].pop(entry.entry_id, None)
+    if data and "hub" in data:
+        await data["hub"].async_close()
     await async_unregister_services(hass)
     return unload_ok
