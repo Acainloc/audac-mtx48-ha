@@ -3,11 +3,8 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import callback
 from .const import (
-    DOMAIN,
-    DEFAULT_PORT,
-    DEFAULT_ZONES,
-    DEFAULT_RATE_LIMIT_MS,
-    DEFAULT_POLL_INTERVAL,
+    DOMAIN, DEFAULT_PORT, DEFAULT_ZONES,
+    DEFAULT_RATE_LIMIT_MS, DEFAULT_POLL_INTERVAL,
 )
 
 DATA_SCHEMA = vol.Schema({
@@ -20,7 +17,6 @@ DATA_SCHEMA = vol.Schema({
 
 class AudacConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
-
     async def async_step_user(self, user_input=None):
         if user_input is not None:
             return self.async_create_entry(
@@ -35,11 +31,9 @@ class AudacConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 class AudacOptionsFlow(config_entries.OptionsFlow):
     def __init__(self, entry):
         self.entry = entry
-
     async def async_step_init(self, user_input=None):
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
-
         schema = vol.Schema({
             vol.Optional(
                 "poll_interval",
