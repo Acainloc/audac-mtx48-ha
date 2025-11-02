@@ -1,0 +1,15 @@
+{
+  "domain": "audac_mtx",
+  "name": "AUDAC MTX",
+  "version": "0.2.0",
+  "documentation": "https://github.com/yourname/audac-mtx48-ha",
+  "iot_class": "local_polling",
+  "config_flow": true,
+  "requirements": [],
+  "codeowners": [
+    "@yourname"
+  ],
+  "loggers": [
+    "custom_components.audac_mtx"
+  ]
+}

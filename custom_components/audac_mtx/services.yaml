@@ -1,0 +1,22 @@
+save_preset:
+  name: Save preset
+  description: Save current AUDAC zones state into a named preset (stored in HA).
+  fields:
+    name:
+      name: Name
+      description: Preset name
+      required: true
+      example: "morning"
+      selector:
+        text: {}
+load_preset:
+  name: Load preset
+  description: Apply a previously saved preset to all zones.
+  fields:
+    name:
+      name: Name
+      description: Preset name to load
+      required: true
+      example: "morning"
+      selector:
+        text: {}
