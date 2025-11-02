@@ -2,18 +2,16 @@ DOMAIN = "audac_mtx"
 DEFAULT_PORT = 5001
 DEFAULT_HOST = "192.168.1.100"
 DEFAULT_ZONES = 4  # MTX48
-DEFAULT_DEVICE_ID = "M001"  # destination (matrix)
-DEFAULT_SOURCE_ID = "F001"  # source (control panel)
+
+# IMPORTANT : destination MTX (fixe) + identifiant client court
+DEFAULT_DEVICE_ID = "X001"   # dest = matrice
+DEFAULT_SOURCE_ID = "HA"     # src = Home Assistant (≤ 4 chars)
 
 TIMEOUT = 3.0
 RECV_EOL = b"\r\n"
 SEND_EOL = "\r\n"
 
-# Rate limit minimal entre deux commandes (ms)
-DEFAULT_RATE_LIMIT_MS = 120
-DEFAULT_POLL_INTERVAL = 5  # s
-
-# Index -> Friendly name
+# 1..8 selon config (garde seulement 1..4 si tu n'utilises que 4 entrées)
 SUPPORTED_SOURCES = {
     1: "Mic 1",
     2: "Mic 2",
@@ -25,5 +23,5 @@ SUPPORTED_SOURCES = {
     8: "WMI",
 }
 
-# Inverse pour les sélections par nom
+# Inverse pour sélection par nom
 FRIENDLY_TO_INDEX = {v: k for k, v in SUPPORTED_SOURCES.items()}
